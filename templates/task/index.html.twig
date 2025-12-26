@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Tâches{% endblock %}
+
+{% block body %}
+<h1>Liste des Tâches</h1>
+
+<a href="{{ path('task_new') }}">Ajouter une nouvelle tâche</a>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Créée le</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+                {% if task.status %}
+                    Terminée
+                {% else %}
+                    À faire
+                {% endif %}
+            </td>
+            <td>{{ task.createdAt|date('d/m/Y H:i') }}</td>
+            <td>
+                <a href="{{ path('task_show', {'id': task.id}) }}">Voir</a>
+                <a href="{{ path('task_edit', {'id': task.id}) }}">Modifier</a>
+                <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                    <button type="submit" onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6">Aucune tâche trouvée.</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
