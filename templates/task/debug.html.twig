@@ -1,0 +1,58 @@
+{# templates/task/debug.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Insertion</title>
+    <style>
+        body { padding: 20px; font-family: Arial; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; }
+        table { border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug Insertion Directe</h1>
+    
+    {% if id %}
+        <p class="success">✅ Tâche créée avec ID: {{ id }}</p>
+    {% else %}
+        <p class="error">❌ Échec de création</p>
+    {% endif %}
+    
+    <h2>📋 Tâches dans la base ({{ tasks|length }}):</h2>
+    
+    {% if tasks|length > 0 %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Créée le</th>
+            </tr>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description|slice(0, 50) }}{% if task.description|length > 50 %}...{% endif %}</td>
+                <td>{{ task.status ? '✅ Terminée' : '⏳ En cours' }}</td>
+                <td>{{ task.createdAt|date('d/m/Y H:i:s') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="error">⚠️ Aucune tâche trouvée dans la base</p>
+    {% endif %}
+    
+    <h3>🔗 Actions :</h3>
+    <ul>
+        <li><a href="{{ path('task_debug_insert') }}">🔄 Relancer le test d'insertion</a></li>
+        <li><a href="{{ path('task_check_db') }}">📊 Vérifier la base de données</a></li>
+        <li><a href="{{ path('task_sql_test') }}">⚡ Test SQL direct</a></li>
+        <li><a href="{{ path('task_new') }}">📝 Tester le formulaire normal</a></li>
+        <li><a href="{{ path('task_index') }}">📋 Voir la liste normale</a></li>
+    </ul>
+</body>
+</html>

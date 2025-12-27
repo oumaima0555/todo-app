@@ -33,6 +33,7 @@ final class TaskController extends AbstractController
             $task->setCreatedAt(new \DateTime());
             $em->persist($task);
             $em->flush();
+
             return $this->redirectToRoute('task_index');
         }
 
@@ -41,7 +42,7 @@ final class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'task_show', methods:['GET'])]
+    #[Route('/{id}', name: 'task_show', requirements: ['id' => '\d+'], methods:['GET'])]
     public function show(Task $task): Response
     {
         return $this->render('task/show.html.twig', [
@@ -57,6 +58,7 @@ final class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+
             return $this->redirectToRoute('task_index');
         }
 
@@ -75,10 +77,117 @@ final class TaskController extends AbstractController
 
         return $this->redirectToRoute('task_index');
     }
-    #[Route('/task/test', name: 'task_test')]
-public function test(): Response
-{
-    return new Response('Controller détecté ✅');
-}
 
+    #[Route('/test', name: 'task_test')]
+    public function test(): Response
+    {
+        return new Response('Controller détecté ✅');
+    }
+
+    // ==================== ROUTES DE DEBUG ====================
+    
+    #[Route('/debug/insert', name: 'task_debug_insert')]
+    public function debugInsert(EntityManagerInterface $em): Response
+    {
+        // Test 1: Insertion directe sans formulaire
+        $task = new Task();
+        $task->setTitle('Test Debug ' . date('H:i:s'));
+        $task->setDescription('Test insertion directe');
+        $task->setStatus(false);
+        $task->setCreatedAt(new \DateTime());
+        
+        $em->persist($task);
+        $em->flush();
+        
+        $id = $task->getId();
+        
+        // Test 2: Lecture de toutes les tâches
+        $allTasks = $em->getRepository(Task::class)->findAll();
+        
+        return $this->render('task/debug.html.twig', [
+            'id' => $id,
+            'tasks' => $allTasks
+        ]);
+    }
+    
+    #[Route('/debug/check-db', name: 'task_check_db')]
+    public function checkDb(EntityManagerInterface $em): Response
+    {
+        $connection = $em->getConnection();
+        
+        try {
+            // Test connexion
+            $connection->executeQuery('SELECT 1');
+            
+            // Vérifie si la table existe
+            $tables = $connection->fetchAllAssociative("SHOW TABLES LIKE 'task'");
+            $tableExists = count($tables) > 0;
+            
+            // Compte les tâches
+            $taskCount = 0;
+            if ($tableExists) {
+                $taskCount = $connection->fetchOne("SELECT COUNT(*) FROM task");
+            }
+            
+            // Structure de la table
+            $structure = [];
+            if ($tableExists) {
+                $structure = $connection->fetchAllAssociative("DESCRIBE task");
+            }
+            
+            // Toutes les tâches
+            $allTasks = [];
+            if ($tableExists) {
+                $allTasks = $em->getRepository(Task::class)->findAll();
+            }
+            
+            return $this->render('task/check_db.html.twig', [
+                'tableExists' => $tableExists,
+                'taskCount' => $taskCount,
+                'structure' => $structure,
+                'allTasks' => $allTasks
+            ]);
+            
+        } catch (\Exception $e) {
+            return new Response('❌ ERREUR DB: ' . $e->getMessage());
+        }
+    }
+    
+    #[Route('/debug/sql-test', name: 'task_sql_test')]
+    public function sqlTest(EntityManagerInterface $em): Response
+    {
+        $connection = $em->getConnection();
+        
+        $output = "<h1>Test SQL Direct</h1>";
+        
+        try {
+            // Test 1: Insertion SQL directe
+            $connection->executeQuery("
+                INSERT INTO task (title, description, status, created_at) 
+                VALUES ('Test SQL Direct', 'Insertion via SQL pur', 1, NOW())
+            ");
+            
+            $output .= "<p style='color: green;'>✅ Insertion SQL réussie</p>";
+            
+            // Test 2: Comptage
+            $count = $connection->fetchOne("SELECT COUNT(*) FROM task");
+            $output .= "<p>Nombre de tâches: $count</p>";
+            
+            // Test 3: Affichage
+            $tasks = $connection->fetchAllAssociative("SELECT * FROM task ORDER BY id DESC LIMIT 5");
+            $output .= "<h3>Dernières tâches:</h3>";
+            $output .= "<ul>";
+            foreach ($tasks as $task) {
+                $output .= "<li>#{$task['id']} - {$task['title']} ({$task['created_at']})</li>";
+            }
+            $output .= "</ul>";
+            
+        } catch (\Exception $e) {
+            $output .= "<p style='color: red;'>❌ Erreur: " . $e->getMessage() . "</p>";
+        }
+        
+        $output .= "<br><a href='/task/'>Retour à la liste</a>";
+        
+        return new Response($output);
+    }
 }

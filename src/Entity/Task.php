@@ -21,7 +21,7 @@ class Task
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?bool $status = null;
+    private ?bool $status = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -60,7 +60,7 @@ class Task
         return $this->status;
     }
 
-    public function setStatus(bool $status): static
+    public function setStatus(?bool $status): static
     {
         $this->status = $status;
 

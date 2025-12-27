@@ -1,0 +1,34 @@
+{# templates/debug/sql_test.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test SQL Direct</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>⚡ Test SQL Direct</h1>
+    
+    <h2>Connexion MySQL :</h2>
+    {% if ping.test == 1 %}
+        <p class="success">✅ Connexion à MySQL réussie</p>
+    {% else %}
+        <p class="error">❌ Échec de connexion à MySQL</p>
+    {% endif %}
+    
+    <h2>Table 'task' :</h2>
+    {% if tables|length > 0 %}
+        <p class="success">✅ Table 'task' existe</p>
+    {% else %}
+        <p class="error">❌ Table 'task' n'existe pas</p>
+    {% endif %}
+    
+    <h2>Nombre de tâches :</h2>
+    <p>Total : {{ count }} tâche(s)</p>
+    
+    <a href="{{ path('debug_test_db') }}">Retour au test principal</a>
+</body>
+</html>

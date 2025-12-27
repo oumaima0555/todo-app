@@ -1,14 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier la tâche{% endblock %}
+{% block title %}Modifier une tâche{% endblock %}
 
 {% block body %}
-<h1>Modifier la tâche</h1>
+<h2>Modifier la tâche</h2>
 
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button>Mettre à jour</button>
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.status) }}
+    <button type="submit" class="btn btn-success mt-2">Modifier</button>
 {{ form_end(form) }}
 
-<a href="{{ path('task_index') }}">⬅ Retour à la liste</a>
+<a href="{{ path('task_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
 {% endblock %}
