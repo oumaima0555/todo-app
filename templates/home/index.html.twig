@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Todo App</h1>
+    
+    {% if app.user %}
+        <p>Bonjour <strong>{{ app.user.email }}</strong> !</p>
+        <a href="/task" class="btn btn-primary">Voir mes tâches</a>
+        <a href="{{ path('app_logout') }}" class="btn btn-secondary">Déconnexion</a>
+    {% else %}
+        <div class="mt-4">
+            <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+            <a href="{{ path('app_register') }}" class="btn btn-success">S'inscrire</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
