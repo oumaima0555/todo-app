@@ -16,11 +16,21 @@ final class TaskController extends AbstractController
 {
     #[Route('/', name: 'task_index', methods:['GET'])]
     public function index(TaskRepository $taskRepository): Response
-    {
-        return $this->render('task/index.html.twig', [
-            'tasks' => $taskRepository->findAll(),
-        ]);
-    }
+{
+    //Ajouter par SALMA
+    //  Sécurité : utilisateur connecté
+    $this->denyAccessUnlessGranted('ROLE_USER');
+
+    //  Logique métier : seulement ses tâches
+    $tasks = $taskRepository->findBy([
+        'user' => $this->getUser()
+    ]);
+
+    return $this->render('task/index.html.twig', [
+        'tasks' => $tasks,
+    ]);
+}
+
 
     #[Route('/new', name: 'task_new', methods:['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
@@ -29,13 +39,23 @@ final class TaskController extends AbstractController
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $task->setCreatedAt(new \DateTime());
-            $em->persist($task);
-            $em->flush();
+       if ($form->isSubmitted() && $form->isValid()) {
 
-            return $this->redirectToRoute('task_index');
-        }
+       //  sécurité : utilisateur connecté
+       $this->denyAccessUnlessGranted('ROLE_USER');
+
+       //  LIGNE OBLIGATOIRE (LE PROBLÈME ÉTAIT ICI)
+       $task->setUser($this->getUser());
+
+       // (optionnel si déjà dans le constructeur)
+       $task->setCreatedAt(new \DateTime());
+
+       $em->persist($task);
+       $em->flush();
+
+       return $this->redirectToRoute('task_index');
+}
+
 
         return $this->render('task/new.html.twig', [
             'form' => $form->createView(),
@@ -90,16 +110,22 @@ final class TaskController extends AbstractController
     public function debugInsert(EntityManagerInterface $em): Response
     {
         // Test 1: Insertion directe sans formulaire
+        //AJOUTER PAR SALMA : sécurité utilisateur connecté
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $task = new Task();
         $task->setTitle('Test Debug ' . date('H:i:s'));
         $task->setDescription('Test insertion directe');
         $task->setStatus(false);
-        $task->setCreatedAt(new \DateTime());
-        
+        $task->setCreatedAt(new \DateTime()); // garde si pas de constructeur
+
+        $task->setUser($this->getUser()); //  OUI obligatoire
+
         $em->persist($task);
         $em->flush();
-        
-        $id = $task->getId();
+
+         $id = $task->getId();
+
         
         // Test 2: Lecture de toutes les tâches
         $allTasks = $em->getRepository(Task::class)->findAll();
