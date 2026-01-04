@@ -1,0 +1,94 @@
+/* ---- PAGE LISTE DES TÂCHES ---- */
+
+body{
+    background:#ffd9e2;
+    font-family:"Poppins","Segoe UI",Arial,sans-serif;
+}
+
+/* Titre */
+h1, h2, h3{
+    color:#7a1b22;
+    font-weight:800;
+}
+
+/* Bouton Ajouter */
+a.btn-primary{
+    background:#e88f6a !important;      /* orange notes */
+    border:none;
+    border-radius:14px;
+    font-weight:700;
+}
+
+a.btn-primary:hover{
+    opacity:.9;
+}
+
+/* Carte contenant le tableau */
+.table{
+    background:#ffe5ec;
+    border-radius:18px;
+    overflow:hidden;
+    border:2px solid #ffc6d3;
+}
+
+/* En-tête tableau */
+.table thead{
+    background:#ffc6d3;
+}
+
+.table thead th{
+    border:none;
+    color:#7a1b22;
+    font-weight:800;
+}
+
+/* Lignes */
+.table tbody tr{
+    background:white;
+}
+
+.table tbody tr:nth-child(even){
+    background:#fff5f7;   /* alternance très légère */
+}
+
+.table td, .table th{
+    border:none !important;
+    padding:12px 10px;
+}
+
+/* Badge status */
+td:nth-child(4){
+    font-weight:700;
+    color:#7a1b22;
+}
+
+/* Boutons actions */
+.btn-sm{
+    border-radius:10px !important;
+    font-weight:600;
+}
+
+/* Voir */
+.btn-info{
+    background:#a8d8ff;
+    border:none;
+}
+
+/* Modifier */
+.btn-warning{
+    background:#ffd18b;
+    border:none;
+}
+
+/* Supprimer */
+.btn-danger{
+    background:#ff8a8a;
+    border:none;
+}
+
+/* Cellule vide message */
+td[colspan="5"]{
+    text-align:center;
+    color:#7a1b22;
+    font-weight:700;
+}

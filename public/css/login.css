@@ -1,0 +1,84 @@
+body{
+    background: #ffd9e2; /* rose clair */
+    font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+}
+
+/* Carte centrale */
+form{
+    width: 420px;
+    margin: 40px auto;
+    background: #ffe5ec;          /* fond planner */
+    padding: 25px 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    border: 2px solid #ffc6d3;
+}
+
+/* Titre principal type Daily planner */
+h1{
+    text-align: left;
+    color: #7a1b22;               /* bordeaux */
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+/* Labels style planner */
+label{
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    color: #7a1b22;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Champs */
+input[type="text"],
+input[type="password"]{
+    width: 100%;
+    background: #ffffff;
+    border: 2px solid #ffc6d3;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus{
+    border-color: #f29bb2;
+}
+
+/* Bouton */
+button{
+    width: 100%;
+    margin-top: 18px;
+    padding: 10px 0;
+    border: none;
+    border-radius: 12px;
+    background: #e88f6a;          /* orange pastel du bloc notes */
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover{
+    opacity: .9;
+    transform: translateY(-1px);
+}
+
+/* Message d'erreur */
+.alert-danger{
+    background:#ffb3c0;
+    border: 1px solid #d16b7a;
+    color:#7a1b22;
+    border-radius: 10px;
+}
+
+/* Lien logout */
+a{
+    color:#7a1b22;
+    font-weight:600;
+}

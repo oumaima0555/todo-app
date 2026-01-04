@@ -27,7 +27,7 @@ class Task
     private ?\DateTimeInterface $createdAt = null;
 
     // AJOUT : relation Task -> User
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
