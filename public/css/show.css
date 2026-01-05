@@ -1,0 +1,73 @@
+/* ---- DETAILS TÂCHE ---- */
+
+body{
+    background:#ffd9e2;
+    font-family:"Poppins","Segoe UI",Arial,sans-serif;
+}
+
+/* Titre */
+h2{
+    color:#7a1b22;
+    font-weight:800;
+    text-align:center;
+    margin-bottom:18px;
+}
+
+/* Carte liste */
+.list-group{
+    width: 450px;
+    margin: 0 auto;
+    background:#ffe5ec;
+    border-radius:18px;
+    border:2px solid #ffc6d3;
+    padding:15px 10px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Chaque ligne */
+.list-group-item{
+    background:white;
+    border:none;
+    margin:6px 10px;
+    border-radius:12px;
+    padding:10px 12px;
+}
+
+/* Labels en bordeaux */
+.list-group-item strong{
+    color:#7a1b22;
+}
+
+/* Status text */
+.list-group-item:last-child{
+    font-weight:600;
+}
+
+/* Boutons bas */
+.btn{
+    border-radius:12px !important;
+    font-weight:700;
+}
+
+/* Retour */
+.btn-secondary{
+    background:#a8a8a8;
+    border:none;
+}
+
+/* Modifier */
+.btn-warning{
+    background:#ffd18b !important;
+    border:none;
+}
+
+/* Supprimer */
+.btn-danger{
+    background:#ff8a8a !important;
+    border:none;
+}
+
+/* Espacement boutons */
+.mt-3{
+    margin-top:10px !important;
+}

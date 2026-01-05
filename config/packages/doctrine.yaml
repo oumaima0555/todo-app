@@ -2,7 +2,8 @@ doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
         driver: 'pdo_mysql'
-        server_version: '10.4.32'
+        # Explicit server version to support MariaDB introspection and avoid information_schema errors
+        server_version: '10.11.2'
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
 

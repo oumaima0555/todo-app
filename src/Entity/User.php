@@ -7,8 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-// ajout:entity task
+// ajout:entity task par SALMA
 use App\Entity\Task;
+// fin ajout
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -40,14 +41,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
-     // AJOUT : relation User -> Task
+     // AJOUT : relation User -> Task par SALMA
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Task::class, orphanRemoval: true)]
     private Collection $tasks;
     //AJOUT: Constructeur
     public function __construct(){
     $this->tasks = new ArrayCollection();
     }
-
+    // Fin AJOUT par SALMA
     public function getId(): ?int
     {
         return $this->id;

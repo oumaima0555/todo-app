@@ -35,6 +35,9 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        # Ajouter par SALMA pour securiser les taches pas obligatoire!
+        - { path: ^/task, roles: ROLE_USER }
+
 
 when@test:
     security:

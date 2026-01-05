@@ -2,11 +2,19 @@
 
 {% block title %}Liste des tâches{% endblock %}
 
-{% block body %}
-<a href="{{ path('task_new') }}" class="btn btn-primary mb-3">Ajouter une tâche</a>
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    {# Bootstrap Icons #}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
 
-<table class="table table-bordered">
-    <thead>
+{% block body %}
+<a href="{{ path('task_new') }}" class="btn btn-primary mb-3">
+    <i class="bi bi-plus-circle"></i> Ajouter une tâche
+</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Titre</th>
@@ -23,16 +31,29 @@
                 <td>{{ task.description }}</td>
                 <td>{{ task.status ? 'Terminée' : 'À faire' }}</td>
                 <td>
-                    <a href="{{ path('task_show', {'id': task.id}) }}" class="btn btn-info btn-sm">Voir</a>
-                    <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                    <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline-block;">
+                    {# Voir #}
+                    <a href="{{ path('task_show', {'id': task.id}) }}" class="btn btn-info btn-sm" title="Voir">
+                        <i class="bi bi-eye"></i>
+                    </a>
+
+                    {# Modifier #}
+                    <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+
+                    {# Supprimer #}
+                    <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
-                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                        <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </form>
                 </td>
             </tr>
         {% else %}
-            <tr><td colspan="5">Aucune tâche trouvée</td></tr>
+            <tr>
+                <td colspan="5" class="text-center">Aucune tâche trouvée</td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>

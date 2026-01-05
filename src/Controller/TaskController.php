@@ -17,7 +17,7 @@ final class TaskController extends AbstractController
     #[Route('/', name: 'task_index', methods:['GET'])]
     public function index(TaskRepository $taskRepository): Response
 {
-    //Ajouter par SALMA
+    //Ajouter par SALMA deja fait non aujourd'hui
     //  Sécurité : utilisateur connecté
     $this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -25,7 +25,7 @@ final class TaskController extends AbstractController
     $tasks = $taskRepository->findBy([
         'user' => $this->getUser()
     ]);
-
+    // Fin SALMA
     return $this->render('task/index.html.twig', [
         'tasks' => $tasks,
     ]);
@@ -65,6 +65,12 @@ final class TaskController extends AbstractController
     #[Route('/{id}', name: 'task_show', requirements: ['id' => '\d+'], methods:['GET'])]
     public function show(Task $task): Response
     {
+        // Ajouter par SALMA
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        if ($task->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+        // Fin SALMA
         return $this->render('task/show.html.twig', [
             'task' => $task,
         ]);
@@ -73,6 +79,12 @@ final class TaskController extends AbstractController
     #[Route('/{id}/edit', name: 'task_edit', methods:['GET','POST'])]
     public function edit(Request $request, Task $task, EntityManagerInterface $em): Response
     {
+        // Ajouter par SALMA
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        if ($task->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+        // Fin SALMA
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 
@@ -90,6 +102,12 @@ final class TaskController extends AbstractController
     #[Route('/{id}/delete', name: 'task_delete', methods:['POST'])]
     public function delete(Request $request, Task $task, EntityManagerInterface $em): Response
     {
+        // Ajouter par SALMA
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        if ($task->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+        // Fin SALMA
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
             $em->remove($task);
             $em->flush();

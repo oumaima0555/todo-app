@@ -1,0 +1,91 @@
+body{
+    background: #ffd9e2;
+    font-family: "Poppins","Segoe UI",Arial,sans-serif;
+}
+
+/* Conteneur des pages */
+form, form[name="registration_form"]{
+    width: 420px;
+    margin: 40px auto;
+    background: #ffe5ec;
+    padding: 25px 30px;
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border: 2px solid #ffc6d3;
+}
+
+/* Titres */
+h1{
+    color:#7a1b22;
+    font-weight:800;
+    font-size:26px;
+    margin-bottom:15px;
+}
+
+/* Sous-titres bootstrap */
+.h3{
+    color:#7a1b22 !important;
+    font-weight:800 !important;
+}
+
+/* Labels */
+label{
+    margin-top:10px;
+    color:#7a1b22;
+    font-weight:600;
+    font-size:14px;
+}
+
+/* Inputs Symfony & Bootstrap */
+input, .form-control{
+    width:100%;
+    background:#fff;
+    border:2px solid #ffc6d3 !important;
+    border-radius:10px !important;
+    padding:8px 10px;
+    font-size:14px;
+}
+
+input:focus{
+    border-color:#f29bb2 !important;
+    outline:none;
+}
+
+/* Checkbox terms */
+input[type="checkbox"]{
+    width:auto;
+    accent-color:#7a1b22;
+}
+
+/* Boutons */
+button, .btn{
+    width:100%;
+    margin-top:15px;
+    padding:10px 0;
+    border:none;
+    border-radius:12px !important;
+    background:#e88f6a !important;
+    color:white !important;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    opacity:.9;
+    transform:translateY(-1px);
+}
+
+/* Alerte erreur */
+.alert-danger{
+    background:#ffb3c0;
+    border:1px solid #d16b7a;
+    color:#7a1b22;
+    border-radius:10px;
+}
+
+/* Liens */
+a{
+    color:#7a1b22;
+    font-weight:600;
+}

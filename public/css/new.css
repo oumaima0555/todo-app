@@ -1,0 +1,66 @@
+/* ---- AJOUTER / MODIFIER UNE TÂCHE ---- */
+
+body{
+    background:#ffd9e2;
+    font-family:"Poppins","Segoe UI",Arial,sans-serif;
+}
+
+/* Titre */
+h2{
+    color:#7a1b22;
+    font-weight:800;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+/* Carte du formulaire */
+form{
+    width: 450px;
+    margin: 0 auto;
+    background:#ffe5ec;
+    border-radius:18px;
+    border:2px solid #ffc6d3;
+    padding:20px 25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Labels */
+label{
+    color:#7a1b22;
+    font-weight:600;
+}
+
+/* Champs input & textarea */
+input, textarea, select{
+    width:100%;
+    background:white;
+    border:2px solid #ffc6d3 !important;
+    border-radius:12px !important;
+    padding:8px 10px;
+    margin-bottom:10px;
+}
+
+input:focus, textarea:focus, select:focus{
+    outline:none;
+    border-color:#f2a1b6 !important;
+}
+
+/* Bouton Ajouter */
+.btn-success{
+    background:#e88f6a !important;
+    border:none;
+    border-radius:14px;
+    font-weight:700;
+    width:100%;
+}
+
+/* Bouton retour */
+.btn-secondary{
+    display:block;
+    width: 450px;
+    margin: 10px auto;
+    background:#a8a8a8;
+    border:none;
+    border-radius:14px;
+    font-weight:700;
+}
