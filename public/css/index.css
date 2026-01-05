@@ -1,7 +1,7 @@
 /* ---- PAGE LISTE DES TÂCHES ---- */
 
 body{
-    background:#ffd9e2;
+    background: linear-gradient(135deg, #ffd9e2 0%, #ffe5ec 100%);
     font-family:"Poppins","Segoe UI",Arial,sans-serif;
 }
 
@@ -91,4 +91,96 @@ td[colspan="5"]{
     text-align:center;
     color:#7a1b22;
     font-weight:700;
+}
+
+/* ---- DARK MODE ---- */
+.light-theme body {
+    background: linear-gradient(135deg, #ffd9e2 0%, #ffe5ec 100%);
+    color: #333;
+}
+
+.light-theme h1, .light-theme h2, .light-theme h3 {
+    color:#7a1b22;
+}
+
+.light-theme .table {
+    background:#ffe5ec;
+    border:2px solid #ffc6d3;
+}
+
+.light-theme .table thead {
+    background:#ffc6d3;
+}
+
+.light-theme .table thead th {
+    color:#7a1b22;
+}
+
+.light-theme .table tbody tr {
+    background:white;
+}
+
+.light-theme .table tbody tr:nth-child(even) {
+    background:#fff5f7;
+}
+
+.light-theme .table td, .light-theme .table th {
+    color: #333;
+}
+
+.light-theme td[colspan="5"] {
+    color:#7a1b22;
+}
+
+.dark-theme body {
+    background: linear-gradient(135deg, #2c2c2c 0%, #3a3a3a 100%);
+    color: #e0e0e0;
+}
+
+.dark-theme h1, .dark-theme h2, .dark-theme h3 {
+    color: #ff6b9d;
+}
+
+.dark-theme .table {
+    background: #3a3a3a;
+    border: 2px solid #555;
+}
+
+.dark-theme .table thead {
+    background: #555;
+}
+
+.dark-theme .table thead th {
+    color: #ff6b9d;
+}
+
+.dark-theme .table tbody tr {
+    background: #4a4a4a;
+}
+
+.dark-theme .table tbody tr:nth-child(even) {
+    background: #404040;
+}
+
+.dark-theme .table td, .dark-theme .table th {
+    color: #e0e0e0;
+}
+
+.dark-theme td[colspan="5"] {
+    color: #ff6b9d;
+}
+
+.dark-theme .btn-outline-secondary {
+    border-color: #ff6b9d;
+    color: #ff6b9d;
+}
+
+.dark-theme .btn-outline-secondary:hover {
+    background: #ff6b9d;
+    color: white;
+}
+
+.dark-theme .container {
+    background: rgba(42, 42, 42, 0.9) !important;
+    color: #e0e0e0;
 }

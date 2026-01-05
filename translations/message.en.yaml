@@ -1,0 +1,7 @@
+app.title: Task list
+login.title: Login
+login.email: Email
+login.password: Password
+login.submit: Sign in
+login.forgot: Forgot password?
+logout: Logout

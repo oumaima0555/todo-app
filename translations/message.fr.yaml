@@ -1,0 +1,7 @@
+app.title: Liste des tâches
+login.title: Connexion
+login.email: Email
+login.password: Mot de passe
+login.submit: Se connecter
+login.forgot: Mot de passe oublié ?
+logout: Déconnexion
