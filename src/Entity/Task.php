@@ -26,7 +26,7 @@ class Task
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
-    // AJOUT : relation Task -> User
+    // AJOUT : relation Task -> User deja fait par SALMA
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
@@ -90,7 +90,7 @@ class Task
 
         return $this;
     }
-    //  AJOUT : getter/setter User
+    //  AJOUT : getter/setter User deja fait par SALMA
     public function getUser(): ?User
     {
         return $this->user;
