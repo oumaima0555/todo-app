@@ -10,12 +10,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/task')]
 final class TaskController extends AbstractController
 {
     #[Route('/', name: 'task_index', methods:['GET'])]
-    public function index(TaskRepository $taskRepository, Request $request): Response
+    public function index(TaskRepository $taskRepository, Request $request, ChartBuilderInterface $chartBuilder): Response
     {
         //Ajouter par SALMA deja fait non aujourd'hui
         //  Sécurité : utilisateur connecté
@@ -48,6 +51,35 @@ final class TaskController extends AbstractController
         $todo = $total - $done;
 
         // Fin SALMA
+
+        // --- CHART GENERATION ---
+        $chart = $chartBuilder->createChart(Chart::TYPE_DOUGHNUT);
+
+        $chart->setData([
+            'labels' => ['Terminées', 'À faire'],
+            'datasets' => [
+                [
+                    'backgroundColor' => ['#10b981', '#f59e0b'],
+                    'borderColor' => ['transparent', 'transparent'],
+                    'data' => [$done, $todo],
+                ],
+            ],
+        ]);
+
+        $chart->setOptions([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => [
+                    'position' => 'bottom',
+                    'labels' => [
+                        'color' => '#6b7280',
+                        'font' => ['family' => 'Outfit']
+                    ]
+                ]
+            ],
+            'cutout' => '70%',
+        ]);
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,
             'counters' => [
@@ -55,6 +87,7 @@ final class TaskController extends AbstractController
                 'done' => $done,
                 'todo' => $todo
             ],
+            'chart' => $chart,
             'searchParams' => [
                 'q' => $q,
                 'status' => $status
@@ -104,6 +137,23 @@ final class TaskController extends AbstractController
         // Fin SALMA
         return $this->render('task/show.html.twig', [
             'task' => $task,
+        ]);
+    }
+
+    #[Route('/{id}/toggle', name: 'task_toggle', methods:['POST'])]
+    public function toggle(Task $task, EntityManagerInterface $em): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        if ($task->getUser() !== $this->getUser()) {
+             return new JsonResponse(['error' => 'Access denied'], 403);
+        }
+
+        $task->setStatus(!$task->isStatus());
+        $em->flush();
+
+        return new JsonResponse([
+            'status' => $task->isStatus(),
+            'message' => 'Task updated'
         ]);
     }
 
