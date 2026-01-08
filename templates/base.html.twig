@@ -11,16 +11,30 @@
     {% block stylesheets %}{% endblock %}
 </head>
 
-<body class="p-3 {% block body_class %}{% endblock %}">
-<div class="container" style="max-width: 800px; background: rgba(255,255,255,0.9); border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<body class="{% block body_class %}{% endblock %}">
+<div class="container app-container" style="max-width: 900px;">
 
     {% block theme_toggle %}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>List des taches</h1>
-        <button id="theme-toggle" class="btn btn-outline-secondary">
-            <i class="bi bi-moon-fill" id="theme-icon"></i>
-        </button>
-    </div>
+    <header class="header-modern">
+        <div class="brand-icon">
+            <i class="bi bi-check2-square"></i>
+        </div>
+        <div>
+            <h2 class="m-0" style="font-weight: 800; letter-spacing: -1px;">Todo App</h2>
+            <small class="text-secondary fw-semibold">Workspace</small>
+        </div>
+        
+        <div class="ms-auto d-flex align-items-center gap-3">
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="theme-toggle-btn text-decoration-none" title="Se déconnecter">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+            {% endif %}
+            <button id="theme-toggle" class="theme-toggle-btn">
+                <i class="bi bi-moon-stars-fill" id="theme-icon"></i>
+            </button>
+        </div>
+    </header>
     {% endblock %}
 
     {% block body %}{% endblock %}

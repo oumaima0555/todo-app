@@ -1,27 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
-{% endblock %}
+{% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-7 col-lg-5">
+        <div class="stats-card pt-5 pb-5 px-5 shadow-lg border-0" style="background: var(--surface-card);">
+            <div class="text-center mb-4">
+                 <div class="d-inline-flex align-items-center justify-content-center mb-3" 
+                     style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color), #fb7185); border-radius: 16px; box-shadow: 0 4px 15px -3px var(--primary-glow);">
+                    <i class="bi bi-person-plus-fill text-white fs-3"></i>
+                </div>
+                <h2 class="h3 fw-bold mb-1">Créer un compte</h2>
+                <p class="text-muted small">Rejoignez Todo App dès aujourd'hui</p>
+            </div>
 
-    <h1>Register</h1>
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger mb-4" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-    {{ form_errors(registrationForm) }}
+            {{ form_start(registrationForm, {'attr': {'class': 'd-flex flex-column gap-3'}}) }}
+                
+                <div class="form-group">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Email</label>
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'exemple@email.com'}}) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+                <div class="form-group">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Mot de passe</label>
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': '••••••••'}}) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                <div class="form-check my-2">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                    <label class="form-check-label text-muted small" for="{{ registrationForm.agreeTerms.vars.id }}">
+                        J'accepte les <a href="#" class="text-primary text-decoration-none">conditions d'utilisation</a>
+                    </label>
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 fs-6 shadow-sm mt-2">
+                    S'inscrire
+                </button>
+            {{ form_end(registrationForm) }}
+            
+            <div class="text-center mt-4 pt-3 border-top border-light">
+                <p class="text-muted small mb-3">Déjà un compte ? <a href="{{ path('app_login') }}" class="text-primary fw-bold text-decoration-none">Se connecter</a></p>
+                <a href="{{ path('app_home') }}" class="btn btn-secondary btn-sm d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-house-door"></i> Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

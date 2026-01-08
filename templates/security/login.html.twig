@@ -1,54 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-{% endblock %}
-
-{# Désactivation du dark mode #}
-{% block theme_toggle %}{% endblock %}
-{% block theme_script %}{% endblock %}
-{% block body_class %}light-theme{% endblock %}
+{% block title %}Se connecter - Todo App{% endblock %}
 
 {% block body %}
-<form method="post">
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-7 col-lg-5">
+        <div class="stats-card pt-5 pb-5 px-5 shadow-lg border-0" style="background: var(--surface-card);">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center mb-3" 
+                     style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary-color), #fb7185); border-radius: 16px; box-shadow: 0 4px 15px -3px var(--primary-glow);">
+                    <i class="bi bi-box-arrow-in-right text-white fs-3"></i>
+                </div>
+                <h2 class="h3 fw-bold mb-1">Bon retour !</h2>
+                <p class="text-muted small">Connectez-vous à votre espace</p>
+            </div>
 
-    {% if error %}
-        <div class="alert alert-danger">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
+            <form method="post" class="d-flex flex-column gap-3">
+                {% if error %}
+                    <div class="alert alert-danger mb-0 text-center small rounded-3">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="inputEmail" class="form-label small fw-bold text-muted text-uppercase">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" placeholder="exemple@email.com" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="inputPassword" class="form-label small fw-bold text-muted text-uppercase mb-0">Mot de passe</label>
+                    </div>
+                    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="••••••••" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button class="btn btn-primary w-100 py-2 fs-6 shadow-sm mt-2" type="submit">
+                    Se connecter
+                </button>
+            </form>
+
+            <div class="text-center mt-4 pt-3 border-top border-light">
+                <p class="text-muted small mb-3">Pas encore de compte ? <a href="{{ path('app_register') }}" class="text-primary fw-bold text-decoration-none">S'inscrire</a></p>
+                <a href="{{ path('app_home') }}" class="btn btn-secondary btn-sm d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-house-door"></i> Retour à l'accueil
+                </a>
+            </div>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    
-    <label for="inputEmail">Email</label>
-    <input type="text"
-           value="{{ last_username }}"
-           name="email"
-           id="inputEmail"
-           class="form-control"
-           autocomplete="username"
-           required autofocus>
-
-    <label for="inputPassword">Password</label>
-    <input type="password"
-           name="password"
-           id="inputPassword"
-           class="form-control"
-           autocomplete="current-password"
-           required>
-
-    <input type="hidden"
-           name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}">
-
-    <button class="btn btn-lg btn-primary mt-3" type="submit">
-        Sign in
-    </button>
-
-    <a class="d-block mt-3" href="#">
-        Mot de passe oublié ?
-    </a>
-</form>
+    </div>
+</div>
 {% endblock %}
