@@ -9,52 +9,128 @@
 {% endblock %}
 
 {% block body %}
-<a href="{{ path('task_new') }}" class="btn btn-primary mb-3">
-    <i class="bi bi-plus-circle"></i> Ajouter une tâche
-</a>
+    {# 1️⃣ Compteurs de tâches #}
+    <div class="row mb-4 text-center">
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Total</h5>
+                    <p class="card-text display-6">{{ counters.total }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Terminées</h5>
+                    <p class="card-text display-6">{{ counters.done }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">À faire</h5>
+                    <p class="card-text display-6">{{ counters.todo }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<table class="table table-bordered table-striped">
+    {# 🔍 Recherche et Filtres #}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="q" class="form-control" placeholder="Rechercher par titre..." value="{{ searchParams.q }}">
+                </div>
+                <div class="col-md-4">
+                    <select name="status" class="form-select">
+                        <option value="">Tous les statuts</option>
+                        <option value="done" {{ searchParams.status == 'done' ? 'selected' : '' }}>Terminées</option>
+                        <option value="todo" {{ searchParams.status == 'todo' ? 'selected' : '' }}>À faire</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Filtrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Mes tâches</h2>
+        <a href="{{ path('task_new') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Ajouter une tâche
+        </a>
+    </div>
+
+<table class="table table-bordered table-hover">
     <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Titre</th>
-            <th>Description</th>
+            <th>Date limite</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        {% for task in tasks %}
-            <tr>
-                <td>{{ task.id }}</td>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.status ? 'Terminée' : 'À faire' }}</td>
-                <td>
-                    {# Voir #}
-                    <a href="{{ path('task_show', {'id': task.id}) }}" class="btn btn-info btn-sm" title="Voir">
-                        <i class="bi bi-eye"></i>
-                    </a>
+   {% for task in tasks %}
+    <tr class="{{ (task.deadline and task.deadline < date() and not task.status) ? 'table-danger' : '' }}">
+        <td>{{ task.id }}</td>
+        <td>
+            {{ task.title }}
+            {% if task.description %}
+                <br><small class="text-muted">{{ task.description|u.truncate(50, '...') }}</small>
+            {% endif %}
+        </td>
+        
+        {# ⏰ Date limite #}
+        <td>
+            {% if task.deadline %}
+                <span class="{{ (task.deadline < date() and not task.status) ? 'text-danger fw-bold' : '' }}">
+                    {{ task.deadline|date('d/m/Y') }}
+                </span>
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
 
-                    {# Modifier #}
-                    <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
-                        <i class="bi bi-pencil"></i>
-                    </a>
+        <!-- ✅ STATUT VISUEL -->
+        <td>
+            <span class="badge {{ task.status ? 'bg-success' : 'bg-warning text-dark' }}">
+                {{ task.status ? 'Terminée' : 'À faire' }}
+            </span>
+        </td>
 
-                    {# Supprimer #}
-                    <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
-                        <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5" class="text-center">Aucune tâche trouvée</td>
-            </tr>
-        {% endfor %}
+        <td>
+            <a href="{{ path('task_show', {'id': task.id}) }}" class="btn btn-info btn-sm" title="Voir">
+                <i class="bi bi-eye"></i>
+            </a>
+
+            <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn btn-warning btn-sm" title="Modifier">
+                <i class="bi bi-pencil"></i>
+            </a>
+
+            <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </form>
+        </td>
+    </tr>
+   {% else %}
+    <tr>
+        <td colspan="6" class="text-center py-4">
+            <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+            Aucune tâche trouvée
+        </td>
+    </tr>
+ {% endfor %}
     </tbody>
-</table>
+  </table>
 {% endblock %}

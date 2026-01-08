@@ -31,13 +31,24 @@ class TaskRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Task
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    // AJOUT : Recherche et Filtre
+    public function findBySearchAndStatus(\App\Entity\User $user, ?string $search, ?bool $status): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->andWhere('t.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('t.createdAt', 'DESC');
+
+        if ($search) {
+            $qb->andWhere('t.title LIKE :search OR t.description LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($status !== null) {
+            $qb->andWhere('t.status = :status')
+               ->setParameter('status', $status);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

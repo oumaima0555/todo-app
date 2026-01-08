@@ -47,6 +47,16 @@ class TaskType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('deadline', \Symfony\Component\Form\Extension\Core\Type\DateType::class, [
+                'label' => 'Date limite',
+                'required' => false,
+                'widget' => 'single_text', // HTML5 date input
+                'attr' => ['class' => 'form-control'],
+                'constraints' => [
+                    // Optionnel : validation que la date est dans le futur si création ?
+                    // Pour l'instant on laisse libre.
+                ]
+            ])
             ->add('status', CheckboxType::class, [
                 'label' => 'Tâche terminée ?',
                 'required' => false,

@@ -15,21 +15,52 @@ use Symfony\Component\Routing\Annotation\Route;
 final class TaskController extends AbstractController
 {
     #[Route('/', name: 'task_index', methods:['GET'])]
-    public function index(TaskRepository $taskRepository): Response
-{
-    //Ajouter par SALMA deja fait non aujourd'hui
-    //  Sécurité : utilisateur connecté
-    $this->denyAccessUnlessGranted('ROLE_USER');
+    public function index(TaskRepository $taskRepository, Request $request): Response
+    {
+        //Ajouter par SALMA deja fait non aujourd'hui
+        //  Sécurité : utilisateur connecté
+        $this->denyAccessUnlessGranted('ROLE_USER');
 
-    //  Logique métier : seulement ses tâches
-    $tasks = $taskRepository->findBy([
-        'user' => $this->getUser()
-    ]);
-    // Fin SALMA
-    return $this->render('task/index.html.twig', [
-        'tasks' => $tasks,
-    ]);
-}
+        // Récupération des filtres
+        $q = $request->query->get('q');
+        $status = $request->query->get('status');
+
+        // Conversion du status en booléen ou null
+        $statusBool = null;
+        if ($status === 'done') {
+            $statusBool = true;
+        } elseif ($status === 'todo') {
+            $statusBool = false;
+        }
+
+        //  Logique métier : recherche
+        $tasks = $taskRepository->findBySearchAndStatus(
+            $this->getUser(),
+            $q,
+            $statusBool
+        );
+
+        // Compteurs (Globaux)
+        // Note : Idéalement faire des requêtes COUNT en DB pour la perf, mais ici on reste simple
+        $allTasks = $taskRepository->findBy(['user' => $this->getUser()]);
+        $total = count($allTasks);
+        $done = count(array_filter($allTasks, fn($t) => $t->isStatus() === true));
+        $todo = $total - $done;
+
+        // Fin SALMA
+        return $this->render('task/index.html.twig', [
+            'tasks' => $tasks,
+            'counters' => [
+                'total' => $total,
+                'done' => $done,
+                'todo' => $todo
+            ],
+            'searchParams' => [
+                'q' => $q,
+                'status' => $status
+            ]
+        ]);
+    }
 
 
     #[Route('/new', name: 'task_new', methods:['GET','POST'])]

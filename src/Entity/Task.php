@@ -90,6 +90,22 @@ class Task
 
         return $this;
     }
+    // AJOUT : deadline
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deadline = null;
+
+    public function getDeadline(): ?\DateTimeInterface
+    {
+        return $this->deadline;
+    }
+
+    public function setDeadline(?\DateTimeInterface $deadline): static
+    {
+        $this->deadline = $deadline;
+
+        return $this;
+    }
+
     //  AJOUT : getter/setter User deja fait par SALMA
     public function getUser(): ?User
     {
