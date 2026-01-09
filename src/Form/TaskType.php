@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Task;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -57,6 +58,17 @@ class TaskType extends AbstractType
                     // Pour l'instant on laisse libre.
                 ]
             ])
+            ->add('priority', ChoiceType::class, [
+                'label' => 'Priorité',
+                'choices' => [
+                    'Urgente' => 'urgent',
+                    'Normale' => 'normal',
+                    'Faible'  => 'low',
+               ],
+                'expanded' => false, // select dropdown
+                'multiple' => false,
+                'attr' => ['class' => 'form-select'],
+      ])
             ->add('status', CheckboxType::class, [
                 'label' => 'Tâche terminée ?',
                 'required' => false,

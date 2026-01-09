@@ -25,6 +25,10 @@ class Task
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
+    // AJOUT : priority
+    #[ORM\Column(length: 20)]
+    private string $priority = 'normal';
+
 
     // AJOUT : relation Task -> User deja fait par SALMA
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
@@ -118,4 +122,16 @@ class Task
 
         return $this;
     }
+    // AJOUT : priority
+    public function getPriority(): string
+    {
+    return $this->priority;
+    }
+
+   public function setPriority(string $priority): static
+   {
+    $this->priority = $priority;
+    return $this;
+    }
+
 }

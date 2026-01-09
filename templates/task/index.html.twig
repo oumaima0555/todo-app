@@ -93,25 +93,36 @@
                                 {{ task.deadline|date('d M Y') }}
                             </span>
                         {% endif %}
-                        
+                        {#  PRIORITÉ seulement si NON terminée #}
+                        {% if not task.status %}
+                            {% if task.priority == 'urgent' %}
+                                <span class="badge bg-danger">Urgente</span>
+                            {% elseif task.priority == 'low' %}
+                                <span class="badge bg-success">Faible</span>
+                            {% else %}
+                                <span class="badge bg-warning text-dark">Normale</span>
+                            {% endif %}
+                        {% endif %}
                         <span data-status-target="badge" class="task-status-badge {{ task.status ? 'status-done' : 'status-todo' }}">
                             {{ task.status ? 'Terminée' : 'En cours' }}
                         </span>
                     </div>
                 </div>
-
                 <div class="task-actions">
-                    <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn-icon" title="Modifier">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                    
-                    <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Supprimer cette tâche ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
-                        <button type="submit" class="btn-icon delete" title="Supprimer">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </form>
+                        {% if not task.status %}
+                            <a href="{{ path('task_edit', {'id': task.id}) }}" class="btn-icon" title="Modifier">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        {% endif %}
+                        <form action="{{ path('task_delete', {'id': task.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Supprimer cette tâche ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+                            <button type="submit" class="btn-icon delete" title="Supprimer">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
                 </div>
+
+               
             </div>
         {% else %}
             <div class="text-center py-5">

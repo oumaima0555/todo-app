@@ -15,6 +15,11 @@
                 <div class="mb-3">
                     {{ form_row(form.description, {'attr': {'class': 'form-control', 'rows': 4}}) }}
                 </div>
+                {# PRIORITÉ (APRÈS DESCRIPTION) #}
+                <div class="mb-3">
+                    {{ form_row(form.priority, {'attr': {'class': 'form-select'}}) }}
+                </div>
+
                  <div class="row">
                     <div class="col-md-6 mb-3">
                          {{ form_row(form.deadline, {'attr': {'class': 'form-control'}}) }}

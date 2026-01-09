@@ -32,23 +32,44 @@ class TaskRepository extends ServiceEntityRepository
     //    }
 
     // AJOUT : Recherche et Filtre
-    public function findBySearchAndStatus(\App\Entity\User $user, ?string $search, ?bool $status): array
-    {
-        $qb = $this->createQueryBuilder('t')
-            ->andWhere('t.user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('t.createdAt', 'DESC');
+public function findBySearchAndStatus(
+    \App\Entity\User $user,
+    ?string $search,
+    ?bool $status
+): array {
+    $qb = $this->createQueryBuilder('t')
+        ->andWhere('t.user = :user')
+        ->setParameter('user', $user);
 
-        if ($search) {
-            $qb->andWhere('t.title LIKE :search OR t.description LIKE :search')
-               ->setParameter('search', '%' . $search . '%');
-        }
+    // 🔍 Recherche
+    if ($search) {
+        $qb->andWhere('t.title LIKE :search OR t.description LIKE :search')
+           ->setParameter('search', '%' . $search . '%');
+    }
 
-        if ($status !== null) {
-            $qb->andWhere('t.status = :status')
-               ->setParameter('status', $status);
-        }
+    // 🔎 SI filtre statut → pas de tri intelligent
+    if ($status !== null) {
+        $qb->andWhere('t.status = :status')
+           ->setParameter('status', $status)
+           ->orderBy('t.deadline', 'ASC');
 
         return $qb->getQuery()->getResult();
     }
+
+    // ✅ SINON : TRI PAR DÉFAUT INTELLIGENT
+    $qb
+        // 1️⃣ en cours d’abord, terminées en bas
+        ->orderBy('t.status', 'ASC')
+
+        // 2️⃣ dates NULL à la fin
+        ->addSelect(
+            "CASE WHEN t.deadline IS NULL THEN 1 ELSE 0 END AS HIDDEN deadlineSort"
+        )
+        ->addOrderBy('deadlineSort', 'ASC')
+
+        // 3️⃣ tri par date
+        ->addOrderBy('t.deadline', 'ASC');
+
+    return $qb->getQuery()->getResult();
+}
 }

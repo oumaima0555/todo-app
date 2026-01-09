@@ -27,6 +27,10 @@ final class TaskController extends AbstractController
         // Récupération des filtres
         $q = $request->query->get('q');
         $status = $request->query->get('status');
+        // 🔁 TRI PAR DATE
+        $sort = $request->query->get('sort', 'asc'); // asc | desc
+        $direction = $sort === 'desc' ? 'DESC' : 'ASC';
+
 
         // Conversion du status en booléen ou null
         $statusBool = null;
@@ -36,12 +40,14 @@ final class TaskController extends AbstractController
             $statusBool = false;
         }
 
-        //  Logique métier : recherche
+        //  Logique métier : recherche et filtres par salma
         $tasks = $taskRepository->findBySearchAndStatus(
-            $this->getUser(),
-            $q,
-            $statusBool
-        );
+        $this->getUser(),
+        $q,
+        $statusBool,
+        $direction
+);
+
 
         // Compteurs (Globaux)
         // Note : Idéalement faire des requêtes COUNT en DB pour la perf, mais ici on reste simple
@@ -181,27 +187,28 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'task_delete', methods:['POST'])]
-    public function delete(Request $request, Task $task, EntityManagerInterface $em): Response
-    {
-        // Ajouter par SALMA
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        if ($task->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
-        // Fin SALMA
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
-            $em->remove($task);
-            $em->flush();
-        }
+  public function delete(Request $request, Task $task, EntityManagerInterface $em): Response
+  {
+    // Sécurité utilisateur
+    $this->denyAccessUnlessGranted('ROLE_USER');
+    if ($task->getUser() !== $this->getUser()) {
+        throw $this->createAccessDeniedException();
+    }
 
+    // ❌ BLOQUER SI TÂCHE TERMINÉE
+    if ($task->isStatus()) {
+        $this->addFlash('warning', 'Impossible de supprimer une tâche terminée.');
         return $this->redirectToRoute('task_index');
     }
 
-    #[Route('/test', name: 'task_test')]
-    public function test(): Response
-    {
-        return new Response('Controller détecté ✅');
+    if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+        $em->remove($task);
+        $em->flush();
     }
+
+    return $this->redirectToRoute('task_index');
+}
+
 
     // ==================== ROUTES DE DEBUG ====================
     
